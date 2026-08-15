@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.1.0 - 2026-08-15
 
 - Split the enterprise-style API and deployment stack into the
   `guard-bands-reference` repository.
