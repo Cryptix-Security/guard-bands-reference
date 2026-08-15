@@ -454,7 +454,7 @@ Key files include:
 | `SECURITY.md` | Vulnerability reporting policy |
 | `CONTRIBUTING.md` | Contribution guidance |
 | `QUICKSTART.md` | Setup, demo, and operational notes |
-| `Guard-Bands-Paper.md` | Technical research paper |
+| `Guard-Bands-Paper.md` | Reference-deployment architecture and evidence; links to the canonical core research paper |
 
 ---
 
@@ -496,18 +496,21 @@ More detail:
 
 ---
 
-## Research Paper
+## Research and Design
 
-The included paper expands on:
+The core repository owns the canonical research and design narrative so the
+mechanism, security claims, threat model, FastAPI boundary, and MCP boundary
+remain versioned with the implementation:
 
-- the underlying security problem
-- threat model assumptions
-- implementation architecture
-- deployment considerations
-- business and operational use cases
-- comparison with existing approaches
+- [Canonical Guard Bands research document](https://github.com/Cryptix-Security/guard-bands/blob/main/docs/RESEARCH.md)
+- [Core architecture and threat model](https://github.com/Cryptix-Security/guard-bands/blob/main/docs/ARCHITECTURE.md)
 
-Read the paper: [`Guard-Bands-Paper.md`](./Guard-Bands-Paper.md)
+This repository documents only deployment-specific architecture and evidence:
+
+- [`Guard-Bands-Paper.md`](./Guard-Bands-Paper.md)
+- [`docs/EVALUATION.md`](./docs/EVALUATION.md)
+- [`docs/DUAL_CHANNEL.md`](./docs/DUAL_CHANNEL.md)
+- [`docs/MCP_REFERENCE.md`](./docs/MCP_REFERENCE.md)
 
 ---
 
