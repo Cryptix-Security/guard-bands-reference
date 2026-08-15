@@ -16,7 +16,7 @@ has the most to prove.
 Install the benchmark extra:
 
 ```bash
-pip install 'guard-bands[bench]'
+pip install 'guard-bands-reference[bench]'
 ```
 
 Free wiring check — a scripted stub "model", no API key, no cost:

@@ -10,7 +10,8 @@ Design rules:
   inject via the environment at the deployment layer (Vault Agent, ECS task
   secrets, Kubernetes External Secrets), so no SDK is required for that path.
 - The AWS and Vault SDKs (``boto3`` / ``hvac``) are optional dependencies,
-  imported lazily. Install with ``pip install guard-bands[aws]`` or ``[vault]``.
+  imported lazily. Install with ``pip install guard-bands-reference[aws]`` or
+  ``guard-bands-reference[vault]``.
 - "Not found" returns the caller's default; a backend/credential error is
   raised loudly so misconfiguration fails closed rather than silently blank.
 """
@@ -57,7 +58,8 @@ class AwsSecretsManagerProvider:
                 import boto3  # optional dependency
             except ImportError as exc:  # pragma: no cover - import guard
                 raise SecretResolutionError(
-                    "SECRETS_BACKEND=aws requires boto3. Install with: pip install 'guard-bands[aws]'"
+                    "SECRETS_BACKEND=aws requires boto3. Install with: "
+                    "pip install 'guard-bands-reference[aws]'"
                 ) from exc
             self._client = boto3.client(
                 "secretsmanager",
@@ -108,7 +110,8 @@ class VaultProvider:
                 import hvac  # optional dependency
             except ImportError as exc:  # pragma: no cover - import guard
                 raise SecretResolutionError(
-                    "SECRETS_BACKEND=vault requires hvac. Install with: pip install 'guard-bands[vault]'"
+                    "SECRETS_BACKEND=vault requires hvac. Install with: "
+                    "pip install 'guard-bands-reference[vault]'"
                 ) from exc
             self._client = hvac.Client(url=self._url, token=self._token)
         return self._client

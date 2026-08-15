@@ -1,4 +1,4 @@
-from app.crypto import GuardBandCrypto
+from guardbands import GuardBandCrypto
 from integrations.rag_middleware import (
     RetrievedDocument,
     build_guarded_rag_prompt,
@@ -57,4 +57,3 @@ def test_build_guarded_rag_prompt_includes_wrapped_documents():
     assert "Question: What happened?" in prompt
     assert "Document 1 (kb://one):" in prompt
     assert "⟪INERT:START:v:1:" in prompt
-

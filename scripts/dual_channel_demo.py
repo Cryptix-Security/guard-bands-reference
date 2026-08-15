@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT))
 # The planes have no development fallback keys (fail closed), so the demo
 # mints a fresh Ed25519 keypair: private -> data plane, public -> control plane.
 if not (os.environ.get("DUAL_CHANNEL_SIGNING_KEY") and os.environ.get("DUAL_CHANNEL_VERIFY_KEY")):
-    from app.crypto import generate_ed25519_keypair
+    from guardbands import generate_ed25519_keypair
 
     _private_b64, _public_b64 = generate_ed25519_keypair()
     os.environ["DUAL_CHANNEL_SIGNING_KEY"] = _private_b64

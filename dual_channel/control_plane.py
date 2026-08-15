@@ -25,13 +25,13 @@ import sys
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from app.crypto import GuardBandCrypto, StaticKeyResolver, load_ed25519_public_key
+from guardbands import GuardBandCrypto, StaticKeyResolver, load_ed25519_public_key
 from app.secrets_provider import build_secret_provider
 from dual_channel import DATA_PLANE_ISSUER, DATA_PLANE_KEY_ID
 
 KEYGEN_HINT = (
     "Generate a keypair with: make dual-channel-keys "
-    "(or: python3 -c \"from app.crypto import generate_ed25519_keypair as g; "
+    "(or: python3 -c \"from guardbands import generate_ed25519_keypair as g; "
     "priv, pub = g(); print(priv); print(pub)\")"
 )
 

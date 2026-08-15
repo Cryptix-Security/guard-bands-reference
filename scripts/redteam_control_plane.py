@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 # Fresh keypair before importing the planes (they fail closed without one).
-from app.crypto import generate_ed25519_keypair  # noqa: E402
+from guardbands import generate_ed25519_keypair  # noqa: E402
 
 _priv, _pub = generate_ed25519_keypair()
 os.environ["DUAL_CHANNEL_SIGNING_KEY"] = _priv
@@ -30,7 +30,7 @@ os.environ["DUAL_CHANNEL_VERIFY_KEY"] = _pub
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from app.crypto import (  # noqa: E402
+from guardbands import (  # noqa: E402
     GuardBandCrypto,
     StaticKeyResolver,
     generate_ed25519_keypair as _gen,

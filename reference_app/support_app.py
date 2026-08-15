@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from app.authorization import Principal, authorize_action
-from app.crypto import GuardBandCrypto
+from guardbands import GuardBandCrypto
 
 
 crypto = GuardBandCrypto(

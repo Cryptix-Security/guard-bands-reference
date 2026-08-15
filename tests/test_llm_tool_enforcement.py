@@ -2,7 +2,7 @@ import asyncio
 from types import SimpleNamespace
 
 from app.config import settings
-from app.crypto import GuardBandCrypto
+from guardbands import GuardBandCrypto
 from app.llm import LLMService
 
 

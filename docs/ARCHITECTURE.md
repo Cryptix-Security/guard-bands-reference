@@ -40,13 +40,14 @@ Verification fails closed. If a block is malformed, tampered with, signed by an 
 
 ## FastAPI Integration
 
-The project includes `integrations.fastapi_guard.GuardBandVerificationMiddleware` for routes that should only accept verified Guard Band request bodies.
+The core package includes `guardbands.integrations.fastapi.GuardBandVerificationMiddleware`
+for routes that should only accept verified Guard Band request bodies.
 
 ```python
 from fastapi import FastAPI, Request
 
-from app.crypto import GuardBandCrypto
-from integrations.fastapi_guard import (
+from guardbands import GuardBandCrypto
+from guardbands.integrations.fastapi import (
     GuardBandVerificationMiddleware,
     guard_band_verification,
 )

@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from app.crypto import GuardBandCrypto, extract_guard_band_blocks
+from guardbands import GuardBandCrypto, extract_guard_band_blocks
 
 
 def bench(label: str, samples: list[float]) -> None:

@@ -2,7 +2,9 @@
 
 Montgomery (Monte) Toren  
 contact@cryptix.com  
-https://github.com/Cryptix-Security/guard-bands  
+Core library: https://github.com/Cryptix-Security/guard-bands
+
+Reference deployment: https://github.com/Cryptix-Security/guard-bands-reference
 Copyright 2026 | Draft for Discussion
 
 ## Executive Summary

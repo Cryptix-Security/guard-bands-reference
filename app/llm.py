@@ -4,7 +4,7 @@ from anthropic import AsyncAnthropic
 
 from app.config import settings
 from app.cost import actual_chat_cost, estimate_chat_request_cost
-from app.crypto import GuardBandCrypto, StaticKeyResolver, extract_guard_band_blocks
+from guardbands import GuardBandCrypto, StaticKeyResolver, extract_guard_band_blocks
 from app.replay import apply_replay_protection
 
 logger = logging.getLogger(__name__)

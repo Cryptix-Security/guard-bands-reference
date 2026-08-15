@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Split the enterprise-style API and deployment stack into the
+  `guard-bands-reference` repository.
+- Replaced the local cryptographic implementation and FastAPI middleware with
+  a versioned dependency on the standalone `guard-bands` core package.
+
 - Added an adversarial red-team of the two-channel control plane (`scripts/redteam_control_plane.py`, `make redteam-control-plane`): a battery of enforcement-path bypass attempts (forgery, tampering, wrong-keypair signatures, HMAC/Ed25519 algorithm confusion, foreign issuer, wrong-channel/cross-tenant/context-swap, expired bands, homoglyph markers, oversized/malformed input, marker smuggling, and authorization bypass). Exits non-zero on any bypass so it doubles as a regression guard; 0 bypasses at this revision.
 - Added an AgentDojo benchmark harness (`integrations/agentdojo/`, `scripts/run_agentdojo_benchmark.py`, `bench` extra): runs Guard Bands as a defense pipeline (cryptographic spotlighting plus an optional provenance gate) against tool-calling agents, with a free scripted-stub validation path, a cost estimate and confirmation before any live run, and unit tests for the defense mechanisms. See `docs/AGENTDOJO_HARNESS.md` for usage and a note on results with current frontier models.
 - Added an AgentDojo-style structural workflow evaluation script and documentation for reproducible local boundary tests.

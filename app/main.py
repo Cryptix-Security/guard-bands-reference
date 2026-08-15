@@ -9,7 +9,7 @@ from slowapi.util import get_remote_address
 
 from app.audit import AuditEvent, audit
 from app.config import settings
-from app.crypto import GuardBandCrypto, StaticKeyResolver
+from guardbands import GuardBandCrypto, StaticKeyResolver
 from app.llm import llm_service
 from app.middleware.auth import SSOHeaderMiddleware
 from app.models import (

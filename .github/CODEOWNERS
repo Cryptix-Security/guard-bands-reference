@@ -3,7 +3,6 @@
 #
 # * @Cryptix-Security/owners
 # /.github/ @Cryptix-Security/owners
-# /app/crypto.py @Cryptix-Security/owners
 # /app/llm.py @Cryptix-Security/owners
 # /app/replay.py @Cryptix-Security/owners
 # /app/middleware/ @Cryptix-Security/owners

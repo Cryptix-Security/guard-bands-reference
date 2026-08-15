@@ -1,6 +1,6 @@
 """Guard Bands defense for the AgentDojo prompt-injection benchmark.
 
-Optional integration — requires `pip install 'guard-bands[bench]'` (installs
+Optional integration — requires `pip install 'guard-bands-reference[bench]'` (installs
 agentdojo). Not imported by the core package.
 """
 

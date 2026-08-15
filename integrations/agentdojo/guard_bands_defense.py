@@ -42,7 +42,7 @@ from agentdojo.types import (
     text_content_block_from_string,
 )
 
-from app.crypto import GuardBandCrypto
+from guardbands import GuardBandCrypto
 
 GUARD_BAND_SYSTEM_SUFFIX = (
     "\n\nSECURITY BOUNDARY: Some tool results are wrapped in Guard Band markers "

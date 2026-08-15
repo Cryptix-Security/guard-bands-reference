@@ -5,7 +5,7 @@ Guard Bands can sit between retrieval and model invocation, or directly in front
 This repository currently includes:
 
 - `integrations/rag_middleware.py` for framework-neutral RAG/document wrapping
-- `integrations/fastapi_guard.py` for FastAPI request verification middleware
+- `guardbands.integrations.fastapi` for FastAPI request verification middleware
 
 ## FastAPI Middleware
 
@@ -14,8 +14,8 @@ Use `GuardBandVerificationMiddleware` when a route expects a JSON body with `wra
 ```python
 from fastapi import FastAPI, Request
 
-from app.crypto import GuardBandCrypto
-from integrations.fastapi_guard import (
+from guardbands import GuardBandCrypto
+from guardbands.integrations.fastapi import (
     GuardBandVerificationMiddleware,
     guard_band_verification,
 )
@@ -44,7 +44,7 @@ The middleware verifies before the route handler runs. Invalid content returns H
 ## RAG Middleware Shape
 
 ```python
-from app.crypto import GuardBandCrypto
+from guardbands import GuardBandCrypto
 from integrations.rag_middleware import (
     RetrievedDocument,
     build_guarded_rag_prompt,

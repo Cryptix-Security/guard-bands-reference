@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from app.crypto import GuardBandCrypto
+from guardbands import GuardBandCrypto
 
 
 @dataclass(frozen=True)
@@ -57,4 +57,3 @@ def build_guarded_rag_prompt(question: str, wrapped_documents: list[dict[str, An
         f"{documents_section}\n\n"
         f"Question: {question}"
     )
-

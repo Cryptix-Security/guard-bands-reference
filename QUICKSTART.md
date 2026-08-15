@@ -18,8 +18,8 @@ This guide walks you through building and running the Guard Bands POC that demon
 ### 1. Clone and Setup
 
 ```bash
-git clone https://github.com/Cryptix-Security/guard-bands.git
-cd guard-bands
+git clone https://github.com/Cryptix-Security/guard-bands-reference.git
+cd guard-bands-reference
 
 # Create virtual environment
 python3 -m venv venv
@@ -141,8 +141,8 @@ For production/enterprise clients, use the `client_credentials` grant type inste
 The security checks are now a standard pytest suite and do not require the server to be running:
 
 ```bash
-cd guard-bands
-source venv/bin/activate
+cd guard-bands-reference
+source .venv/bin/activate
 make test
 ```
 
@@ -490,7 +490,8 @@ Claude's response: [May or may not be fooled by injection]
 
 1. **Read the main [README](README.md)** for conceptual background
 2. **Review [Guard-Bands-Paper.md](Guard-Bands-Paper.md)** for technical details
-3. **Explore `app/crypto.py`** to understand the cryptography
+3. **Explore the [core library](https://github.com/Cryptix-Security/guard-bands)**
+   to understand the cryptography
 4. **Modify `demo_llm_attack.py`** to test your own attack scenarios
 5. **Try different LLM models** by changing the model parameter
 
@@ -516,7 +517,7 @@ LLM_MODEL=claude-3-5-haiku-20241022      # Claude 3.5 Haiku (default, faster for
 
 ### Customizing Guard Band Format
 
-Edit `app/crypto.py` to modify:
+Develop changes in the core `guard-bands` repository to modify:
 - Marker format (⟪INERT:START⟫)
 - Hash algorithm (default: SHA-256)
 - MAC algorithm (default: HMAC-SHA256)
@@ -564,7 +565,8 @@ Found a vulnerability or have ideas for improvement?
 
 ## Resources
 
-- **GitHub**: [github.com/Cryptix-Security/guard-bands](https://github.com/Cryptix-Security/guard-bands)
+- **Reference deployment**: [github.com/Cryptix-Security/guard-bands-reference](https://github.com/Cryptix-Security/guard-bands-reference)
+- **Core library**: [github.com/Cryptix-Security/guard-bands](https://github.com/Cryptix-Security/guard-bands)
 - **Paper**: [Guard-Bands-Paper.md](Guard-Bands-Paper.md)
 - **Anthropic**: [docs.anthropic.com](https://docs.anthropic.com)
 - **FastAPI**: [fastapi.tiangolo.com](https://fastapi.tiangolo.com)

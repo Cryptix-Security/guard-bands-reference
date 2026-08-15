@@ -1,3 +1,4 @@
+guard-bands[fastapi] @ git+https://github.com/Cryptix-Security/guard-bands.git@c4a209f0b9ffaa1b3ff75145bda7c798b0067d0b
 anthropic==0.120.2
 asyncpg==0.31.0
 cryptography==50.0.0

@@ -2,12 +2,15 @@
 
 These exercise the defense mechanisms in isolation (no LLM, no API key). They
 require the benchmark extra and skip cleanly without it:
-    pip install 'guard-bands[bench]'
+    pip install 'guard-bands-reference[bench]'
 """
 
 import pytest
 
-pytest.importorskip("agentdojo", reason="requires guard-bands[bench] (agentdojo)")
+pytest.importorskip(
+    "agentdojo",
+    reason="requires guard-bands-reference[bench] (agentdojo)",
+)
 
 from agentdojo.functions_runtime import FunctionCall, FunctionsRuntime  # noqa: E402
 from agentdojo.types import (  # noqa: E402
@@ -17,7 +20,7 @@ from agentdojo.types import (  # noqa: E402
     text_content_block_from_string,
 )
 
-from app.crypto import GuardBandCrypto  # noqa: E402
+from guardbands import GuardBandCrypto  # noqa: E402
 from integrations.agentdojo import (  # noqa: E402
     GuardBandProvenanceGate,
     GuardBandToolOutputSigner,

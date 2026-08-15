@@ -1,6 +1,6 @@
 """Run the AgentDojo prompt-injection benchmark with the Guard Bands defense.
 
-Requires the benchmark extra:  pip install 'guard-bands[bench]'
+Requires the benchmark extra:  pip install 'guard-bands-reference[bench]'
 
 Examples:
     # Free end-to-end wiring check with a scripted stub model (no API key, no cost)

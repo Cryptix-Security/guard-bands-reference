@@ -1,18 +1,24 @@
-# Guard Bands
+# Guard Bands Reference Deployment
 
-[![CI](https://github.com/Cryptix-Security/guard-bands/actions/workflows/ci.yml/badge.svg)](https://github.com/Cryptix-Security/guard-bands/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/Cryptix-Security/guard-bands/actions/workflows/codeql.yml/badge.svg)](https://github.com/Cryptix-Security/guard-bands/actions/workflows/codeql.yml)
-[![Release](https://img.shields.io/github/v/release/Cryptix-Security/guard-bands?include_prereleases&display_name=tag)](https://github.com/Cryptix-Security/guard-bands/releases)
-[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://github.com/Cryptix-Security/guard-bands/actions/workflows/ci.yml)
+[![CI](https://github.com/Cryptix-Security/guard-bands-reference/actions/workflows/ci.yml/badge.svg)](https://github.com/Cryptix-Security/guard-bands-reference/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Cryptix-Security/guard-bands-reference/actions/workflows/codeql.yml/badge.svg)](https://github.com/Cryptix-Security/guard-bands-reference/actions/workflows/codeql.yml)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://github.com/Cryptix-Security/guard-bands-reference/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 
-**Cryptographic boundaries for separating untrusted LLM content from trusted instructions and tool execution.**
+**A working reference stack for the
+[`guard-bands`](https://github.com/Cryptix-Security/guard-bands) boundary
+library.**
 
-Guard Bands is a proof-of-concept security pattern for LLM applications. It wraps untrusted content with cryptographically verifiable boundaries so an application can distinguish between data that should be treated as inert and instructions that may affect behavior, policy, or tool calls.
+This repository demonstrates the Guard Bands security pattern in realistic LLM
+application conditions. The reusable cryptography, parser, replay primitives,
+and FastAPI middleware live only in the core repository and are consumed here
+as a versioned dependency.
 
 The idea is similar to prepared statements for SQL: separate control from data, then enforce that separation before sensitive operations occur.
 
-The core project is the Guard Bands boundary mechanism. The POC also demonstrates practical controls that many smaller teams want from enterprise LLM security stacks without adopting a heavyweight platform: SSO, identity-aware audit logs, rate limits, Docker Compose deployment, Splunk/PostgreSQL audit sinks, CI, pinned dependencies, and Dependabot maintenance.
+This reference deployment supplies the broader stack: SSO, identity-aware
+audit logs, rate limits, Docker Compose deployment, Splunk/PostgreSQL audit
+sinks, dual-channel services, a Python API SDK, and LLM demonstrations.
 
 ## Official Links
 
@@ -25,8 +31,8 @@ The core project is the Guard Bands boundary mechanism. The POC also demonstrate
 ## Evaluate in 5 Minutes
 
 ```bash
-git clone https://github.com/Cryptix-Security/guard-bands.git
-cd guard-bands
+git clone https://github.com/Cryptix-Security/guard-bands-reference.git
+cd guard-bands-reference
 cp .env.example .env
 python3 - <<'PY'
 from pathlib import Path
@@ -397,9 +403,9 @@ Key files include:
 
 | File | Purpose |
 |---|---|
-| `app/` | FastAPI application and core implementation |
+| `app/` | Reference FastAPI application |
 | `app/authorization.py` | Minimal role/action authorization example |
-| `app/crypto.py` | Guard Band wrapping and verification logic |
+| Core dependency | Guard Band wrapping, verification, replay primitives, and FastAPI middleware |
 | `guardbands_sdk/` | Python SDK for the main API and two-channel APIs |
 | `examples/` | SDK quickstarts and integration examples |
 | `reference_app/` | Small support-ticket reference workflow |

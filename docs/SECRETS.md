@@ -22,7 +22,7 @@ required.
 ## `aws` — AWS Secrets Manager
 
 ```bash
-pip install 'guard-bands[aws]'
+pip install 'guard-bands-reference[aws]'
 SECRETS_BACKEND=aws
 SECRETS_AWS_PREFIX=prod/guard-bands/     # optional
 SECRETS_AWS_REGION=us-east-1             # optional (else default chain)
@@ -40,7 +40,7 @@ to any default; a credential/permission error fails loudly (fail closed).
 ## `vault` — HashiCorp Vault (KV v2)
 
 ```bash
-pip install 'guard-bands[vault]'
+pip install 'guard-bands-reference[vault]'
 SECRETS_BACKEND=vault
 VAULT_ADDR=https://vault.example:8200
 VAULT_TOKEN=<token or use an auth method / agent>

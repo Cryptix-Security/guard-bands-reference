@@ -26,7 +26,7 @@ redteam-control-plane:
 # Emit a fresh Ed25519 keypair in env-file form:
 #   make dual-channel-keys > .env.dual-channel
 dual-channel-keys:
-	@$(PYTHON) -c "from app.crypto import generate_ed25519_keypair as g; priv, pub = g(); print('DUAL_CHANNEL_SIGNING_KEY=' + priv); print('DUAL_CHANNEL_VERIFY_KEY=' + pub)"
+	@$(PYTHON) -c "from guardbands import generate_ed25519_keypair as g; priv, pub = g(); print('DUAL_CHANNEL_SIGNING_KEY=' + priv); print('DUAL_CHANNEL_VERIFY_KEY=' + pub)"
 
 bench:
 	$(PYTHON) scripts/benchmark_parser.py
