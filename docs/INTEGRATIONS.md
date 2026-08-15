@@ -79,8 +79,9 @@ The model still sees document text, but the application now has a per-document c
 - between tool outputs and downstream agent steps
 - before any workflow step that can call privileged tools
 
-## Future Integration Targets
+## Integration Targets
 
 - LangChain document transformer
 - LlamaIndex node postprocessor
-- MCP server for wrapping and verifying resources
+- MCP `tools/call` client/server enforcement (implemented; see
+  [`MCP_REFERENCE.md`](./MCP_REFERENCE.md))

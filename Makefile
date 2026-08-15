@@ -1,4 +1,4 @@
-.PHONY: install-dev test demo reference-demo dual-channel-demo dual-channel-keys agentdojo-style-eval redteam-control-plane bench run
+.PHONY: install-dev test demo reference-demo dual-channel-demo mcp-demo dual-channel-keys agentdojo-style-eval redteam-control-plane bench run
 
 PYTHON ?= python3
 
@@ -16,6 +16,9 @@ reference-demo:
 
 dual-channel-demo:
 	$(PYTHON) scripts/dual_channel_demo.py
+
+mcp-demo:
+	$(PYTHON) -m examples.mcp_guarded_tools
 
 agentdojo-style-eval:
 	$(PYTHON) scripts/evaluate_agentdojo_style.py
