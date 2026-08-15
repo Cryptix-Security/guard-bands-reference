@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.0 - 2026-08-15
+
+- Added a credential-free MCP 2.x reference flow using the core Guard Bands
+  `tools/call` client and server integration.
+- Demonstrated bidirectional Ed25519 role separation: the trusted host signs
+  inputs and the MCP server signs outputs, while each side holds only the
+  other's public verification key.
+- Added `make mcp-demo`, reference documentation, and an end-to-end regression
+  test covering structured output plus the visible model-facing inert boundary.
+
 ## v0.1.0 - 2026-08-15
 
 - Split the enterprise-style API and deployment stack into the

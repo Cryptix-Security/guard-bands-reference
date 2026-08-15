@@ -11,8 +11,8 @@ library.**
 
 This repository demonstrates the Guard Bands security pattern in realistic LLM
 application conditions. The reusable cryptography, parser, replay primitives,
-and FastAPI middleware live only in the core repository and are consumed here
-as a versioned dependency.
+FastAPI middleware, and MCP integration live only in the core repository and
+are consumed here as a versioned dependency.
 
 The idea is similar to prepared statements for SQL: separate control from data, then enforce that separation before sensitive operations occur.
 
@@ -53,6 +53,7 @@ make test
 make demo
 make reference-demo
 make dual-channel-demo
+make mcp-demo
 ```
 
 The demos do not require an LLM API key. See [`QUICKSTART.md`](./QUICKSTART.md) for full setup and SSO instructions.
@@ -140,6 +141,22 @@ make dual-channel-demo
 ```
 
 See [`docs/DUAL_CHANNEL.md`](./docs/DUAL_CHANNEL.md) for the full topology, Docker Compose deployment with split key delivery, and enforced invariants — including what this design does and does not prove.
+
+## MCP Tool Boundary
+
+The MCP reference flow signs model-selected tool arguments before they cross
+the MCP boundary, verifies them before the handler runs, signs the complete
+tool result, and leaves visible inert markers around text returned to the
+model. It uses separate Ed25519 keys for client-to-server and server-to-client
+provenance.
+
+```bash
+make mcp-demo
+```
+
+The demonstration is in-memory and requires no external service or API key.
+See [`docs/MCP_REFERENCE.md`](./docs/MCP_REFERENCE.md) for the trust topology,
+production guidance, and limits.
 
 ---
 
