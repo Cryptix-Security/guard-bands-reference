@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Updated the versioned core dependency to `guard-bands` v0.10.0 for
+  reserved-marker rejection, hardened embedded-block extraction, and typed
+  package metadata.
+
 ## v0.2.0 - 2026-08-15
 
 - Added a credential-free MCP 2.x reference flow using the core Guard Bands
