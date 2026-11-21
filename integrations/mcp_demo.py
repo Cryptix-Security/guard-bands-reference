@@ -2,10 +2,6 @@
 
 from __future__ import annotations
 
-from mcp import Client
-from mcp.server.mcpserver import MCPServer
-from mcp.types import CallToolResult
-
 from guardbands import (
     GuardBandCrypto,
     StaticKeyResolver,
@@ -19,7 +15,9 @@ from guardbands.integrations.mcp import (
     MCPToolPolicy,
     guard_bands_client_capability,
 )
-
+from mcp import Client
+from mcp.server.mcpserver import MCPServer
+from mcp.types import CallToolResult
 
 AUDIENCE = "guard-bands-reference-tools"
 DEMO_CONTEXT = {

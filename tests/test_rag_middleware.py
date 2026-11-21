@@ -1,4 +1,5 @@
 from guardbands import GuardBandCrypto
+
 from integrations.rag_middleware import (
     RetrievedDocument,
     build_guarded_rag_prompt,

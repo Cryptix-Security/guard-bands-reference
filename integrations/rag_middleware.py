@@ -13,7 +13,9 @@ class RetrievedDocument:
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
-def document_context(base_context: dict[str, Any], document: RetrievedDocument, index: int) -> dict[str, Any]:
+def document_context(
+    base_context: dict[str, Any], document: RetrievedDocument, index: int
+) -> dict[str, Any]:
     """Build stable per-document context for signing retrieved content."""
     return {
         **base_context,
@@ -33,11 +35,13 @@ def wrap_retrieved_documents(
     wrapped_documents = []
     for index, document in enumerate(documents):
         context = document_context(base_context, document, index)
-        wrapped_documents.append({
-            "source": document.source,
-            "context": context,
-            "wrapped_content": crypto.wrap_content(document.content, context),
-        })
+        wrapped_documents.append(
+            {
+                "source": document.source,
+                "context": context,
+                "wrapped_content": crypto.wrap_content(document.content, context),
+            }
+        )
     return wrapped_documents
 
 
@@ -45,10 +49,7 @@ def build_guarded_rag_prompt(question: str, wrapped_documents: list[dict[str, An
     """Build a simple prompt that keeps retrieved content visibly separated."""
     blocks = []
     for index, document in enumerate(wrapped_documents, start=1):
-        blocks.append(
-            f"Document {index} ({document['source']}):\n"
-            f"{document['wrapped_content']}"
-        )
+        blocks.append(f"Document {index} ({document['source']}):\n{document['wrapped_content']}")
 
     documents_section = "\n\n".join(blocks)
     return (

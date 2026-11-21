@@ -22,8 +22,8 @@ from guardbands_sdk.models import (
     ExecuteResponse,
     IngestResponse,
     VerifyResponse,
-    WrapResponse,
     WrappedDocument,
+    WrapResponse,
 )
 
 
@@ -163,10 +163,13 @@ class GuardBandsClient(BaseClient):
         context: Mapping[str, Any] | None = None,
         raise_on_invalid: bool = False,
     ) -> VerifyResponse:
-        body = self._post("/verify", {
-            "wrapped_content": wrapped_content,
-            "context": dict(context or {}),
-        })
+        body = self._post(
+            "/verify",
+            {
+                "wrapped_content": wrapped_content,
+                "context": dict(context or {}),
+            },
+        )
         result = VerifyResponse(**body)
         if raise_on_invalid and not result.valid:
             raise VerificationFailed(
@@ -223,13 +226,18 @@ class DataPlaneClient(BaseClient):
         tenant_id: str,
         user: str,
     ) -> IngestResponse:
-        return IngestResponse(**self._post("/ingest", {
-            "content": content,
-            "source": source,
-            "request_id": request_id,
-            "tenant_id": tenant_id,
-            "user": user,
-        }))
+        return IngestResponse(
+            **self._post(
+                "/ingest",
+                {
+                    "content": content,
+                    "source": source,
+                    "request_id": request_id,
+                    "tenant_id": tenant_id,
+                    "user": user,
+                },
+            )
+        )
 
 
 class ControlPlaneClient(BaseClient):
@@ -276,7 +284,9 @@ def _chat_payload(
     return payload
 
 
-def _document_payload(document: WrappedDocument | IngestResponse | Mapping[str, Any]) -> dict[str, Any]:
+def _document_payload(
+    document: WrappedDocument | IngestResponse | Mapping[str, Any],
+) -> dict[str, Any]:
     if isinstance(document, IngestResponse):
         return document.as_document().to_payload()
     if isinstance(document, WrappedDocument):

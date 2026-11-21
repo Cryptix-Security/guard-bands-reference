@@ -19,7 +19,7 @@ Design rules:
 from __future__ import annotations
 
 import os
-from typing import Protocol
+from typing import Any, Protocol
 
 
 class SecretResolutionError(RuntimeError):
@@ -44,15 +44,20 @@ class AwsSecretsManagerProvider:
     string value. Values are cached for the process lifetime.
     """
 
-    def __init__(self, prefix: str = "", region_name: str | None = None,
-                 endpoint_url: str | None = None, client=None) -> None:
+    def __init__(
+        self,
+        prefix: str = "",
+        region_name: str | None = None,
+        endpoint_url: str | None = None,
+        client: Any = None,
+    ) -> None:
         self._prefix = prefix
         self._region_name = region_name
         self._endpoint_url = endpoint_url
         self._client = client
         self._cache: dict[str, str | None] = {}
 
-    def _get_client(self):
+    def _get_client(self) -> Any:
         if self._client is None:
             try:
                 import boto3  # optional dependency
@@ -82,7 +87,7 @@ class AwsSecretsManagerProvider:
             raise SecretResolutionError(
                 f"Failed to resolve secret '{secret_id}' from AWS Secrets Manager: {exc}"
             ) from exc
-        value = response.get("SecretString")
+        value: str | None = response.get("SecretString")
         self._cache[name] = value
         return value
 
@@ -93,9 +98,15 @@ class VaultProvider:
     Reads path ``{mount}/{prefix}{name}`` and returns the ``value`` field.
     """
 
-    def __init__(self, url: str | None = None, token: str | None = None,
-                 mount_point: str = "secret", prefix: str = "guard-bands/",
-                 field: str = "value", client=None) -> None:
+    def __init__(
+        self,
+        url: str | None = None,
+        token: str | None = None,
+        mount_point: str = "secret",
+        prefix: str = "guard-bands/",
+        field: str = "value",
+        client: Any = None,
+    ) -> None:
         self._url = url
         self._token = token
         self._mount_point = mount_point
@@ -104,7 +115,7 @@ class VaultProvider:
         self._client = client
         self._cache: dict[str, str | None] = {}
 
-    def _get_client(self):
+    def _get_client(self) -> Any:
         if self._client is None:
             try:
                 import hvac  # optional dependency
@@ -132,7 +143,7 @@ class VaultProvider:
             raise SecretResolutionError(
                 f"Failed to resolve secret '{path}' from Vault: {exc}"
             ) from exc
-        value = secret["data"]["data"].get(self._field, default)
+        value: str | None = secret["data"]["data"].get(self._field, default)
         self._cache[name] = value
         return value
 

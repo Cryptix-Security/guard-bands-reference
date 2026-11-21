@@ -32,20 +32,28 @@ def client_with_routes(routes):
 def test_sdk_wrap_and_verify_round_trip_shapes():
     client = GuardBandsClient(
         "http://testserver",
-        client=client_with_routes({
-            ("POST", "/wrap"): (200, {
-                "wrapped_content": "wrapped",
-                "nonce": "nonce",
-                "content_hash": "hash",
-            }),
-            ("POST", "/verify"): (200, {
-                "valid": True,
-                "content": "hello",
-                "nonce": "nonce",
-                "key_id": "key001",
-                "version": "2",
-            }),
-        }),
+        client=client_with_routes(
+            {
+                ("POST", "/wrap"): (
+                    200,
+                    {
+                        "wrapped_content": "wrapped",
+                        "nonce": "nonce",
+                        "content_hash": "hash",
+                    },
+                ),
+                ("POST", "/verify"): (
+                    200,
+                    {
+                        "valid": True,
+                        "content": "hello",
+                        "nonce": "nonce",
+                        "key_id": "key001",
+                        "version": "2",
+                    },
+                ),
+            }
+        ),
     )
 
     wrapped = client.wrap("hello", context={"tenant_id": "tenant-a"})
@@ -59,16 +67,21 @@ def test_sdk_wrap_and_verify_round_trip_shapes():
 def test_sdk_verify_can_raise_on_invalid_verify_response():
     client = GuardBandsClient(
         "http://testserver",
-        client=client_with_routes({
-            ("POST", "/verify"): (200, {
-                "valid": False,
-                "content": None,
-                "error": "MAC verification failed",
-                "nonce": None,
-                "key_id": None,
-                "version": None,
-            }),
-        }),
+        client=client_with_routes(
+            {
+                ("POST", "/verify"): (
+                    200,
+                    {
+                        "valid": False,
+                        "content": None,
+                        "error": "MAC verification failed",
+                        "nonce": None,
+                        "key_id": None,
+                        "version": None,
+                    },
+                ),
+            }
+        ),
     )
 
     with pytest.raises(VerificationFailed, match="MAC verification failed"):
@@ -92,15 +105,20 @@ def test_sdk_chat_cost_threshold_maps_to_exception():
     }
     client = GuardBandsClient(
         "http://testserver",
-        client=client_with_routes({
-            ("POST", "/chat"): (402, {
-                "detail": {
-                    "error": "Estimated model cost exceeds organization threshold",
-                    "cost_estimate": estimate,
-                    "hint": "Resubmit with approve_estimated_cost=true to proceed.",
-                },
-            }),
-        }),
+        client=client_with_routes(
+            {
+                ("POST", "/chat"): (
+                    402,
+                    {
+                        "detail": {
+                            "error": "Estimated model cost exceeds organization threshold",
+                            "cost_estimate": estimate,
+                            "hint": "Resubmit with approve_estimated_cost=true to proceed.",
+                        },
+                    },
+                ),
+            }
+        ),
     )
 
     with pytest.raises(CostThresholdExceeded) as exc:
@@ -112,22 +130,27 @@ def test_sdk_chat_cost_threshold_maps_to_exception():
 def test_sdk_estimate_chat_cost_shape():
     client = GuardBandsClient(
         "http://testserver",
-        client=client_with_routes({
-            ("POST", "/chat/estimate-cost"): (200, {
-                "model": "claude-test",
-                "method": "approx_chars_per_token",
-                "currency": "USD",
-                "input_tokens_estimate": 100,
-                "output_tokens_budget": 500,
-                "estimated_input_cost_usd": 0.0001,
-                "estimated_output_cost_usd": 0.0025,
-                "estimated_total_cost_usd": 0.0026,
-                "threshold_usd": 1.0,
-                "threshold_exceeded": False,
-                "requires_confirmation": False,
-                "pricing": {"input_usd_per_mtok": 1.0, "output_usd_per_mtok": 5.0},
-            }),
-        }),
+        client=client_with_routes(
+            {
+                ("POST", "/chat/estimate-cost"): (
+                    200,
+                    {
+                        "model": "claude-test",
+                        "method": "approx_chars_per_token",
+                        "currency": "USD",
+                        "input_tokens_estimate": 100,
+                        "output_tokens_budget": 500,
+                        "estimated_input_cost_usd": 0.0001,
+                        "estimated_output_cost_usd": 0.0025,
+                        "estimated_total_cost_usd": 0.0026,
+                        "threshold_usd": 1.0,
+                        "threshold_exceeded": False,
+                        "requires_confirmation": False,
+                        "pricing": {"input_usd_per_mtok": 1.0, "output_usd_per_mtok": 5.0},
+                    },
+                ),
+            }
+        ),
     )
 
     estimate = client.estimate_chat_cost("hello", max_output_tokens=500)
@@ -150,21 +173,28 @@ def test_sdk_two_channel_ingest_and_execute_shapes():
     }
     data = DataPlaneClient(
         "http://data",
-        client=client_with_routes({
-            ("POST", "/ingest"): (200, ingest_response),
-        }),
+        client=client_with_routes(
+            {
+                ("POST", "/ingest"): (200, ingest_response),
+            }
+        ),
     )
     control = ControlPlaneClient(
         "http://control",
-        client=client_with_routes({
-            ("POST", "/execute"): (200, {
-                "action": "summarize_document",
-                "allowed": True,
-                "documents_verified": 1,
-                "content_length": 42,
-                "summary": "ok",
-            }),
-        }),
+        client=client_with_routes(
+            {
+                ("POST", "/execute"): (
+                    200,
+                    {
+                        "action": "summarize_document",
+                        "allowed": True,
+                        "documents_verified": 1,
+                        "content_length": 42,
+                        "summary": "ok",
+                    },
+                ),
+            }
+        ),
     )
 
     document = data.ingest(
@@ -189,11 +219,16 @@ def test_sdk_two_channel_ingest_and_execute_shapes():
 def test_sdk_control_plane_403_maps_to_authorization_error():
     client = ControlPlaneClient(
         "http://control",
-        client=client_with_routes({
-            ("POST", "/execute"): (403, {
-                "detail": "Role 'viewer' is not allowed to perform: issue_refund",
-            }),
-        }),
+        client=client_with_routes(
+            {
+                ("POST", "/execute"): (
+                    403,
+                    {
+                        "detail": "Role 'viewer' is not allowed to perform: issue_refund",
+                    },
+                ),
+            }
+        ),
     )
 
     with pytest.raises(AuthorizationError, match="viewer"):

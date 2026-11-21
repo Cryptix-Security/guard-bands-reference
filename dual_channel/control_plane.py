@@ -23,16 +23,16 @@ In a deployment it runs as its own process on its own port:
 import sys
 
 from fastapi import FastAPI, HTTPException
+from guardbands import GuardBandCrypto, StaticKeyResolver, load_ed25519_public_key
 from pydantic import BaseModel, Field
 
-from guardbands import GuardBandCrypto, StaticKeyResolver, load_ed25519_public_key
 from app.secrets_provider import build_secret_provider
 from dual_channel import DATA_PLANE_ISSUER, DATA_PLANE_KEY_ID
 
 KEYGEN_HINT = (
     "Generate a keypair with: make dual-channel-keys "
-    "(or: python3 -c \"from guardbands import generate_ed25519_keypair as g; "
-    "priv, pub = g(); print(priv); print(pub)\")"
+    '(or: python3 -c "from guardbands import generate_ed25519_keypair as g; '
+    'priv, pub = g(); print(priv); print(pub)")'
 )
 
 
@@ -122,8 +122,7 @@ async def execute(body: ExecuteRequest):
 
     # 2. Admit data only with a valid data-plane signature — fail closed.
     verified_contents = [
-        _verify_data_plane_document(document, body.tenant_id)
-        for document in body.documents
+        _verify_data_plane_document(document, body.tenant_id) for document in body.documents
     ]
 
     # 3. Execute. Document text is inert data: it is summarized or attached,

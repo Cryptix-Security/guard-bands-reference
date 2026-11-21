@@ -35,7 +35,7 @@ from agentdojo.agent_pipeline import (  # noqa: E402
 )
 from agentdojo.attacks.attack_registry import load_attack  # noqa: E402
 from agentdojo.benchmark import benchmark_suite_with_injections  # noqa: E402
-from agentdojo.functions_runtime import EmptyEnv, Env, FunctionsRuntime  # noqa: E402
+from agentdojo.functions_runtime import EmptyEnv  # noqa: E402
 from agentdojo.task_suite.load_suites import get_suite  # noqa: E402
 
 from integrations.agentdojo import build_guard_bands_pipeline  # noqa: E402
@@ -75,8 +75,11 @@ class StubLLM(BasePipelineElement):
 
 def _config(llm, defense: str | None) -> PipelineConfig:
     return PipelineConfig(
-        llm=llm, model_id=None, defense=defense,
-        system_message_name="default", system_message=None,
+        llm=llm,
+        model_id=None,
+        defense=defense,
+        system_message_name="default",
+        system_message=None,
     )
 
 
@@ -122,32 +125,50 @@ def confirm(prompt: str) -> bool:
         return False
 
 
-def run_one(model: str, defense: str, suite, attack_name: str,
-            user_tasks: Sequence[str] | None, injection_tasks: Sequence[str] | None,
-            logdir: Path | None) -> None:
+def run_one(
+    model: str,
+    defense: str,
+    suite,
+    attack_name: str,
+    user_tasks: Sequence[str] | None,
+    injection_tasks: Sequence[str] | None,
+    logdir: Path | None,
+) -> None:
     from agentdojo.logging import OutputLogger
 
     pipeline = make_pipeline(model, defense)
     attack = load_attack(attack_name, suite, pipeline)
     with OutputLogger(str(logdir) if logdir else None, live=None):
         results = benchmark_suite_with_injections(
-            pipeline, suite, attack, logdir=logdir, force_rerun=True,
-            user_tasks=user_tasks, injection_tasks=injection_tasks,
-            benchmark_version=BENCHMARK_VERSION, verbose=False,
+            pipeline,
+            suite,
+            attack,
+            logdir=logdir,
+            force_rerun=True,
+            user_tasks=user_tasks,
+            injection_tasks=injection_tasks,
+            benchmark_version=BENCHMARK_VERSION,
+            verbose=False,
         )
     utility = results["utility_results"]
     security = results["security_results"]  # True == injection SUCCEEDED (bad)
     attack_success = sum(1 for v in security.values() if v) / (len(security) or 1)
     task_utility = sum(1 for v in utility.values() if v) / (len(utility) or 1)
-    print(f"\n[{defense}]  cases={len(security)}  "
-          f"attack-success-rate={attack_success:.1%}  "
-          f"utility(with attack)={task_utility:.1%}")
+    print(
+        f"\n[{defense}]  cases={len(security)}  "
+        f"attack-success-rate={attack_success:.1%}  "
+        f"utility(with attack)={task_utility:.1%}"
+    )
 
 
 def main() -> int:
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     p.add_argument("--model", default="stub")
-    p.add_argument("--suite", default="banking", choices=["workspace", "banking", "travel", "slack"])
+    p.add_argument(
+        "--suite", default="banking", choices=["workspace", "banking", "travel", "slack"]
+    )
     p.add_argument("--attack", default="important_instructions")
     p.add_argument("--defense", default="both", choices=["baseline", "signed", "gated", "both"])
     p.add_argument("--user-task", action="append", dest="user_tasks")
@@ -165,18 +186,22 @@ def main() -> int:
     if args.model != "stub":
         est = estimate_cost(args.model, n_cases)
         est_str = f"~${est:.2f}" if est is not None else "unknown"
-        print(f"About to run {n_cases} live cases on {args.model} "
-              f"({n_user} user × {n_inj} injection × {len(defenses)} defense). "
-              f"Estimated cost: {est_str}.")
+        print(
+            f"About to run {n_cases} live cases on {args.model} "
+            f"({n_user} user × {n_inj} injection × {len(defenses)} defense). "
+            f"Estimated cost: {est_str}."
+        )
         if not args.yes and not confirm("Proceed and spend API credits?"):
             print("Aborted — no credits spent.")
             return 1
 
     import tempfile
+
     logdir = Path(args.logdir) if args.logdir else Path(tempfile.mkdtemp(prefix="agentdojo-runs-"))
     for defense in defenses:
-        run_one(args.model, defense, suite, args.attack,
-                args.user_tasks, args.injection_tasks, logdir)
+        run_one(
+            args.model, defense, suite, args.attack, args.user_tasks, args.injection_tasks, logdir
+        )
     return 0
 
 

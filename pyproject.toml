@@ -41,6 +41,8 @@ bench = [
 dev = [
   "pytest==9.1.1",
   "hypothesis==6.165.0",
+  "mypy==1.20.2",
+  "ruff==0.17.6",
 ]
 
 [project.urls]
@@ -61,3 +63,48 @@ include = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "N", "UP", "B", "C4", "SIM"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI dependency markers are evaluated once at import time by design.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Header", "fastapi.Security"]
+
+[tool.ruff.lint.per-file-ignores]
+# Demo scripts put the repo root on sys.path before importing app code.
+"scripts/*" = ["E402"]
+# Long lines here are attack fixtures; wrapping them would change the strings
+# the model or parser sees.
+"demo_llm_attack.py" = ["E501"]
+"scripts/redteam_control_plane.py" = ["E402", "E501"]
+# Public SDK exception names; renaming them would break callers.
+"guardbands_sdk/errors.py" = ["N818"]
+# These signatures mirror AgentDojo's BasePipelineElement.query and must match it.
+"integrations/agentdojo/*" = ["B006", "B008"]
+"scripts/run_agentdojo_benchmark.py" = ["E402", "B006", "B008"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+# Strict baseline for the security-sensitive request path. Widen this list as
+# other modules are typed.
+files = [
+  "app/audit.py",
+  "app/authorization.py",
+  "app/config.py",
+  "app/cost.py",
+  "app/llm.py",
+  "app/middleware/auth.py",
+  "app/replay.py",
+  "app/secrets_provider.py",
+]
+
+[[tool.mypy.overrides]]
+# Optional secrets-manager SDKs, installed only with the aws/vault extras.
+module = ["boto3", "boto3.*", "hvac", "hvac.*"]
+ignore_missing_imports = true

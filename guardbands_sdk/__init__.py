@@ -21,8 +21,8 @@ from guardbands_sdk.models import (
     ExecuteResponse,
     IngestResponse,
     VerifyResponse,
-    WrapResponse,
     WrappedDocument,
+    WrapResponse,
 )
 
 __all__ = [

@@ -70,8 +70,13 @@ def test_reference_app_allows_verified_read_only_action():
 
     assert action_response.status_code == 200
     assert action_response.json()["allowed"] is True
-    assert action_response.json()["content_length"] == len("Customer asks for an order status update.")
-    assert action_response.json()["summary"] == "Verified ticket content accepted for read-only summarization."
+    assert action_response.json()["content_length"] == len(
+        "Customer asks for an order status update."
+    )
+    assert (
+        action_response.json()["summary"]
+        == "Verified ticket content accepted for read-only summarization."
+    )
 
 
 def test_reference_app_rejects_refund_action_from_read_only_context():

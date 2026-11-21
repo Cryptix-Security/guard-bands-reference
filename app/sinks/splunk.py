@@ -16,7 +16,9 @@ class SplunkHECSink(AuditSink):
     Set LOG_SPLUNK_SSL_VERIFY=false to disable cert verification for on-prem installs.
     """
 
-    def __init__(self, hec_url: str, token: str, index: str, source: str, ssl_verify: bool = True) -> None:
+    def __init__(
+        self, hec_url: str, token: str, index: str, source: str, ssl_verify: bool = True
+    ) -> None:
         self._url = hec_url.rstrip("/") + "/services/collector/event"
         self._headers = {
             "Authorization": f"Splunk {token}",
@@ -53,5 +55,7 @@ class SplunkHECSink(AuditSink):
                 **event.details,
             },
         }
-        resp = await self._client.post(self._url, headers=self._headers, content=json.dumps(payload))
+        resp = await self._client.post(
+            self._url, headers=self._headers, content=json.dumps(payload)
+        )
         resp.raise_for_status()

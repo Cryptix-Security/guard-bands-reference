@@ -52,7 +52,7 @@ class IngestResponse:
     wrapped_content: str
     context: dict[str, Any]
 
-    def as_document(self) -> "WrappedDocument":
+    def as_document(self) -> WrappedDocument:
         return WrappedDocument(
             wrapped_content=self.wrapped_content,
             context=self.context,

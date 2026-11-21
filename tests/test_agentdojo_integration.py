@@ -19,8 +19,8 @@ from agentdojo.types import (  # noqa: E402
     get_text_content_as_str,
     text_content_block_from_string,
 )
-
 from guardbands import GuardBandCrypto  # noqa: E402
+
 from integrations.agentdojo import (  # noqa: E402
     GuardBandProvenanceGate,
     GuardBandToolOutputSigner,
@@ -58,7 +58,9 @@ def test_signer_is_idempotent():
     signer = GuardBandToolOutputSigner(crypto, set())
     once = signer.query("q", FunctionsRuntime([]), messages=[_tool_message("data")])[3]
     twice = signer.query("q", FunctionsRuntime([]), messages=list(once))[3]
-    assert get_text_content_as_str(once[-1]["content"]) == get_text_content_as_str(twice[-1]["content"])
+    assert get_text_content_as_str(once[-1]["content"]) == get_text_content_as_str(
+        twice[-1]["content"]
+    )
 
 
 def test_gate_blocks_tool_call_carrying_guarded_content():
@@ -68,7 +70,9 @@ def test_gate_blocks_tool_call_carrying_guarded_content():
     # The model tries to pass untrusted (guard-banded) content straight into a tool.
     call = FunctionCall(
         function="send_money",
-        args={"recipient": "the secret account number is DE89370400440532013000 and routing follows"},
+        args={
+            "recipient": "the secret account number is DE89370400440532013000 and routing follows"
+        },
     )
     assistant = ChatAssistantMessage(
         role="assistant", content=[text_content_block_from_string("")], tool_calls=[call]

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from typing import Any
 
 ACTION_POLICY_PATHS = {
     "summarize_ticket": "support.read_only",
@@ -27,7 +27,9 @@ class AuthorizationDecision:
     reason: str
 
 
-def authorize_action(principal: Principal, action: str, context: dict) -> AuthorizationDecision:
+def authorize_action(
+    principal: Principal, action: str, context: dict[str, Any]
+) -> AuthorizationDecision:
     expected_policy_path = ACTION_POLICY_PATHS.get(action)
     if expected_policy_path is None:
         return AuthorizationDecision(False, f"Unknown action: {action}")
@@ -41,7 +43,9 @@ def authorize_action(principal: Principal, action: str, context: dict) -> Author
         return AuthorizationDecision(False, "User context does not match principal")
 
     if context.get("policy_path") != expected_policy_path:
-        return AuthorizationDecision(False, f"Context is not bound to policy path: {expected_policy_path}")
+        return AuthorizationDecision(
+            False, f"Context is not bound to policy path: {expected_policy_path}"
+        )
 
     allowed_actions = set()
     for role in principal.roles:

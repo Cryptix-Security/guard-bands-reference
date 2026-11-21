@@ -1,8 +1,9 @@
+import json
 import os
 import sys
-import json
 
 from dotenv import load_dotenv
+from guardbands import GuardBandKey
 
 from app.secrets_provider import build_secret_provider
 
@@ -13,7 +14,7 @@ class Settings:
     # Core
     SECRET_KEY: bytes
     KEY_ID: str
-    GUARD_BAND_KEYS: dict[str, bytes]
+    GUARD_BAND_KEYS: dict[str, GuardBandKey]
     ANTHROPIC_API_KEY: str
     DEBUG: bool
     GUARD_BAND_TTL_SECONDS: int
@@ -46,9 +47,11 @@ class Settings:
 
         raw_key = self._secrets.get_secret("SECRET_KEY", "") or ""
         if not raw_key:
-            sys.exit("FATAL: SECRET_KEY is not set. Provide it via the environment "
-                     "(or SECRETS_BACKEND=aws|vault). Generate one with: "
-                     "python3 -c \"import secrets; print(secrets.token_urlsafe(32))\"")
+            sys.exit(
+                "FATAL: SECRET_KEY is not set. Provide it via the environment "
+                "(or SECRETS_BACKEND=aws|vault). Generate one with: "
+                'python3 -c "import secrets; print(secrets.token_urlsafe(32))"'
+            )
         self.SECRET_KEY = raw_key.encode("utf-8")
         self.KEY_ID = os.getenv("KEY_ID", "key001")
         self.GUARD_BAND_KEYS = self._load_guard_band_keys(raw_key)
@@ -58,7 +61,9 @@ class Settings:
         # Lifetime stamped into each wrapped band (authenticated iat/exp). Bands
         # verify as expired past this window, independent of the replay ledger.
         self.GUARD_BAND_TTL_SECONDS = int(os.getenv("GUARD_BAND_TTL_SECONDS", "900"))
-        self.REPLAY_PROTECTION_ENABLED = os.getenv("REPLAY_PROTECTION_ENABLED", "false").lower() == "true"
+        self.REPLAY_PROTECTION_ENABLED = (
+            os.getenv("REPLAY_PROTECTION_ENABLED", "false").lower() == "true"
+        )
         self.REPLAY_LEDGER_BACKEND = os.getenv("REPLAY_LEDGER_BACKEND", "memory")
         self.REPLAY_LEDGER_PATH = os.getenv("REPLAY_LEDGER_PATH", "data/replay-ledger.sqlite3")
         self.REPLAY_WINDOW_SECONDS = int(os.getenv("REPLAY_WINDOW_SECONDS", "900"))
@@ -80,8 +85,12 @@ class Settings:
         self.LLM_MAX_OUTPUT_TOKENS = int(os.getenv("LLM_MAX_OUTPUT_TOKENS", "2048"))
         self.COST_GUARD_ENABLED = os.getenv("COST_GUARD_ENABLED", "true").lower() == "true"
         self.COST_GUARD_THRESHOLD_USD = float(os.getenv("COST_GUARD_THRESHOLD_USD", "1.00"))
-        self.COST_GUARD_INPUT_USD_PER_MTOK = float(os.getenv("COST_GUARD_INPUT_USD_PER_MTOK", "1.00"))
-        self.COST_GUARD_OUTPUT_USD_PER_MTOK = float(os.getenv("COST_GUARD_OUTPUT_USD_PER_MTOK", "5.00"))
+        self.COST_GUARD_INPUT_USD_PER_MTOK = float(
+            os.getenv("COST_GUARD_INPUT_USD_PER_MTOK", "1.00")
+        )
+        self.COST_GUARD_OUTPUT_USD_PER_MTOK = float(
+            os.getenv("COST_GUARD_OUTPUT_USD_PER_MTOK", "5.00")
+        )
 
         # SSO — set by oauth2-proxy headers; disabled by default for local dev
         # oauth2-proxy --pass-user-headers=true sets X-Forwarded-User / X-Forwarded-Email
@@ -90,7 +99,7 @@ class Settings:
         self.SSO_HEADER_USER = os.getenv("SSO_HEADER_USER", "X-Forwarded-User")
         self.SSO_HEADER_EMAIL = os.getenv("SSO_HEADER_EMAIL", "X-Forwarded-Email")
 
-    def _load_guard_band_keys(self, fallback_key: str) -> dict[str, bytes]:
+    def _load_guard_band_keys(self, fallback_key: str) -> dict[str, GuardBandKey]:
         raw_keys = self._secrets.get_secret("GUARD_BAND_KEYS", "") or ""
         if not raw_keys:
             return {self.KEY_ID: fallback_key.encode("utf-8")}
@@ -103,7 +112,7 @@ class Settings:
         if not isinstance(parsed, dict) or not parsed:
             sys.exit("FATAL: GUARD_BAND_KEYS must be a non-empty JSON object")
 
-        keys: dict[str, bytes] = {}
+        keys: dict[str, GuardBandKey] = {}
         for key_id, key_value in parsed.items():
             if not isinstance(key_id, str) or not isinstance(key_value, str):
                 sys.exit("FATAL: GUARD_BAND_KEYS must map string key ids to string secrets")

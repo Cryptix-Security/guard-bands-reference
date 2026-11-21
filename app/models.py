@@ -1,13 +1,14 @@
+from typing import Any
+
 from pydantic import BaseModel, Field
-from typing import Optional, Dict, Any
 
 CONTENT_MAX_BYTES = 50_000
 
 
 class WrapRequest(BaseModel):
     content: str = Field(..., max_length=CONTENT_MAX_BYTES)
-    context: Dict[str, Any] = Field(default_factory=dict)
-    key_id: Optional[str] = None
+    context: dict[str, Any] = Field(default_factory=dict)
+    key_id: str | None = None
 
 
 class WrapResponse(BaseModel):
@@ -18,24 +19,24 @@ class WrapResponse(BaseModel):
 
 class VerifyRequest(BaseModel):
     wrapped_content: str
-    context: Dict[str, Any] = Field(default_factory=dict)
+    context: dict[str, Any] = Field(default_factory=dict)
 
 
 class VerifyResponse(BaseModel):
     valid: bool
-    content: Optional[str] = None
-    error: Optional[str] = None
-    nonce: Optional[str] = None
-    key_id: Optional[str] = None
-    version: Optional[str] = None
+    content: str | None = None
+    error: str | None = None
+    nonce: str | None = None
+    key_id: str | None = None
+    version: str | None = None
 
 
 class ChatRequest(BaseModel):
     message: str = Field(..., max_length=CONTENT_MAX_BYTES)
     # context must match what was used when wrapping so the LLM's
     # verify tool call uses the correct signing context
-    context: Dict[str, Any] = Field(default_factory=dict)
-    max_output_tokens: Optional[int] = Field(default=None, ge=1, le=64_000)
+    context: dict[str, Any] = Field(default_factory=dict)
+    max_output_tokens: int | None = Field(default=None, ge=1, le=64_000)
     approve_estimated_cost: bool = False
 
 
@@ -43,7 +44,7 @@ class ChatResponse(BaseModel):
     response: str
     model: str
     usage: dict
-    cost: Optional[dict] = None
+    cost: dict | None = None
 
 
 class CostEstimateResponse(BaseModel):

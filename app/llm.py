@@ -1,10 +1,12 @@
 import logging
+from typing import Any
 
 from anthropic import AsyncAnthropic
+from anthropic.types import MessageParam
+from guardbands import GuardBandCrypto, StaticKeyResolver, extract_guard_band_blocks
 
 from app.config import settings
 from app.cost import actual_chat_cost, estimate_chat_request_cost
-from guardbands import GuardBandCrypto, StaticKeyResolver, extract_guard_band_blocks
 from app.replay import apply_replay_protection
 
 logger = logging.getLogger(__name__)
@@ -37,7 +39,7 @@ _START_MARKER = "⟪INERT:START"
 _END_MARKER = "⟪INERT:END"
 
 
-def _check_signature(wrapped_content: str, context: dict) -> dict:
+def _check_signature(wrapped_content: str, context: dict[str, Any]) -> dict[str, Any]:
     """Check one block's signature and expiry — no HTTP round-trip."""
     try:
         crypto = GuardBandCrypto(
@@ -49,7 +51,7 @@ def _check_signature(wrapped_content: str, context: dict) -> dict:
         return {"valid": False, "error": f"Verification error: {str(e)}"}
 
 
-def verify_message_guard_bands(user_message: str, context: dict) -> str | None:
+def verify_message_guard_bands(user_message: str, context: dict[str, Any]) -> str | None:
     """Verify every guard band block in a message before any model call.
 
     Returns None when the message is safe to send to the model (it has no
@@ -93,8 +95,10 @@ class LLMService:
         self.input_usd_per_mtok = settings.COST_GUARD_INPUT_USD_PER_MTOK
         self.output_usd_per_mtok = settings.COST_GUARD_OUTPUT_USD_PER_MTOK
 
-    def estimate_chat_cost(self, user_message: str, max_output_tokens: int | None = None) -> dict:
-        messages = [{"role": "user", "content": user_message}]
+    def estimate_chat_cost(
+        self, user_message: str, max_output_tokens: int | None = None
+    ) -> dict[str, Any]:
+        messages: list[MessageParam] = [{"role": "user", "content": user_message}]
         return estimate_chat_request_cost(
             model=self.model,
             system=GUARD_BAND_SYSTEM_PROMPT,
@@ -110,14 +114,14 @@ class LLMService:
     async def chat(
         self,
         user_message: str,
-        context: dict | None = None,
+        context: dict[str, Any] | None = None,
         max_output_tokens: int | None = None,
         approve_estimated_cost: bool = False,
-    ) -> dict:
+    ) -> dict[str, Any]:
         if context is None:
             context = {}
 
-        messages = [{"role": "user", "content": user_message}]
+        messages: list[MessageParam] = [{"role": "user", "content": user_message}]
         output_token_budget = max_output_tokens or self.max_output_tokens
         cost_estimate = self.estimate_chat_cost(user_message, output_token_budget)
         if cost_estimate["requires_confirmation"] and not approve_estimated_cost:
@@ -167,9 +171,7 @@ class LLMService:
                     "cost": cost,
                 }
 
-            final_text = "".join(
-                b.text for b in response.content if hasattr(b, "text")
-            )
+            final_text = "".join(b.text for b in response.content if hasattr(b, "text"))
             return {
                 "success": True,
                 "response": final_text,
