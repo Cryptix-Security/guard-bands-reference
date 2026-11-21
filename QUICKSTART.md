@@ -326,7 +326,6 @@ guard-bands/
 ├── integrations/            # FastAPI and RAG integration helpers
 ├── reference_app/           # Small support-ticket reference workflow
 ├── scripts/                 # Local demo and benchmark scripts
-├── test_manual.py           # Legacy wrapper for python3 -m pytest
 ├── demo_llm_attack.py       # Interactive LLM demo
 ├── Makefile                 # Local test, demo, benchmark, and run shortcuts
 ├── Dockerfile               # App container image
