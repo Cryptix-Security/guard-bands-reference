@@ -30,7 +30,7 @@ def main() -> None:
     context = {"request_id": "bench-001", "policy_path": "rag.read_only"}
     block = crypto.wrap_content("Document body " * 200, context)
     prompt = "\n\n".join([block] * 10)
-    malformed_prompt = ("⟪INERT:START:v:1:r:abc:iat:1:exp:2⟫ incomplete\n" * 500) + block
+    malformed_prompt = ("⟪INERT:START:v:2:r:abc:iat:1:exp:2⟫ incomplete\n" * 500) + block
 
     bench("wrap 2.8 KB content", time_call(lambda: crypto.wrap_content("x" * 2800, context)))
     bench("verify 2.8 KB content", time_call(lambda: crypto.extract_and_verify(block, context)))

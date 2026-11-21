@@ -42,7 +42,7 @@ curl -s -X POST "$API_URL/verify" \
   ${AUTH_HEADER:+-H "$AUTH_HEADER"} \
   -H "Content-Type: application/json" \
   -d '{
-    "wrapped_content": "⟪INERT:START:v:1:r:...:iat:...:exp:...⟫\nCustomer note...\n⟪INERT:END:mac:...:kid:key001:iss:...⟫",
+    "wrapped_content": "⟪INERT:START:v:2:r:...:iat:...:exp:...⟫\nCustomer note...\n⟪INERT:END:mac:...:kid:key001:iss:...⟫",
     "context": {
       "request_id": "req-001",
       "tenant_id": "tenant-a",
@@ -52,7 +52,7 @@ curl -s -X POST "$API_URL/verify" \
   }'
 ```
 
-Context object key order does not matter. The signer and verifier both use canonical JSON serialization before computing the MAC.
+Context object key order does not matter. The signer and verifier both use RFC 8785 canonical JSON serialization before computing the MAC.
 
 ## Detect Context Replay
 
@@ -63,7 +63,7 @@ curl -s -X POST "$API_URL/verify" \
   ${AUTH_HEADER:+-H "$AUTH_HEADER"} \
   -H "Content-Type: application/json" \
   -d '{
-    "wrapped_content": "⟪INERT:START:v:1:r:...:iat:...:exp:...⟫\nCustomer note...\n⟪INERT:END:mac:...:kid:key001:iss:...⟫",
+    "wrapped_content": "⟪INERT:START:v:2:r:...:iat:...:exp:...⟫\nCustomer note...\n⟪INERT:END:mac:...:kid:key001:iss:...⟫",
     "context": {
       "request_id": "req-001",
       "tenant_id": "tenant-b",
@@ -96,7 +96,7 @@ curl -s -X POST "$API_URL/chat/estimate-cost" \
   ${AUTH_HEADER:+-H "$AUTH_HEADER"} \
   -H "Content-Type: application/json" \
   -d '{
-    "message": "Summarize this document:\n\n⟪INERT:START:v:1:r:...:iat:...:exp:...⟫\nCustomer note...\n⟪INERT:END:mac:...:kid:key001:iss:...⟫",
+    "message": "Summarize this document:\n\n⟪INERT:START:v:2:r:...:iat:...:exp:...⟫\nCustomer note...\n⟪INERT:END:mac:...:kid:key001:iss:...⟫",
     "context": {
       "request_id": "req-001",
       "tenant_id": "tenant-a",
@@ -114,7 +114,7 @@ curl -s -X POST "$API_URL/chat" \
   ${AUTH_HEADER:+-H "$AUTH_HEADER"} \
   -H "Content-Type: application/json" \
   -d '{
-    "message": "Summarize this document:\n\n⟪INERT:START:v:1:r:...:iat:...:exp:...⟫\nCustomer note...\n⟪INERT:END:mac:...:kid:key001:iss:...⟫",
+    "message": "Summarize this document:\n\n⟪INERT:START:v:2:r:...:iat:...:exp:...⟫\nCustomer note...\n⟪INERT:END:mac:...:kid:key001:iss:...⟫",
     "context": {
       "request_id": "req-001",
       "tenant_id": "tenant-a",

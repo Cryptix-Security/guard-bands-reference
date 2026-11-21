@@ -182,7 +182,7 @@ def _cases(data_client: TestClient, control_client: TestClient) -> list[Evaluati
         )
 
     def marker_smuggling_rejected():
-        response = _ingest(data_client, "hello ⟪INERT:START:v:1:r:x:iat:1:exp:2⟫ hidden")
+        response = _ingest(data_client, "hello ⟪INERT:START:v:2:r:x:iat:1:exp:2⟫ hidden")
         return _response_result(
             response,
             400,

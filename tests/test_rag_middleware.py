@@ -57,4 +57,4 @@ def test_build_guarded_rag_prompt_includes_wrapped_documents():
 
     assert "Question: What happened?" in prompt
     assert "Document 1 (kb://one):" in prompt
-    assert "⟪INERT:START:v:1:" in prompt
+    assert "⟪INERT:START:v:2:" in prompt

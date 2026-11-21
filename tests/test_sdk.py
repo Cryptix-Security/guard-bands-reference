@@ -49,7 +49,7 @@ def test_sdk_wrap_and_verify_round_trip_shapes():
                         "content": "hello",
                         "nonce": "nonce",
                         "key_id": "key001",
-                        "version": "1",
+                        "version": "2",
                     },
                 ),
             }
