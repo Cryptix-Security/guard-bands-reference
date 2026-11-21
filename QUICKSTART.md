@@ -358,22 +358,16 @@ The result includes:
 - **MAC**: HMAC signature binding content + context
 - **Key ID**: Identifier for the signing key
 
-### 2. LLM Detection
+### 2. Server-Side Verification
 
-Claude is trained (via system prompt) to:
-- Detect guard band markers
-- Treat wrapped content as untrusted
-- Call verification before processing
-
-### 3. Verification
-
-The LLM uses a tool to verify:
+Before the first model call, the app finds every guard band block in the
+message and verifies it with the application's own request context:
 
 ```python
-result = verify_guard_bands(
-    wrapped_content=wrapped,
-    context={"request_id": "req-001", "user": "alice"}
-)
+from app.llm import verify_message_guard_bands
+
+error = verify_message_guard_bands(message, {"request_id": "req-001", "user": "alice"})
+# None means every block verified; otherwise the request is rejected
 ```
 
 Verification checks:
@@ -381,10 +375,19 @@ Verification checks:
 - Protocol version, key id, and issuer are authenticated
 - Band has not expired (`iat`/`exp`)
 - Context matches exactly
+- Nonce has not been replayed (when replay protection is enabled)
+- No stray or truncated markers sit outside well-formed blocks
+
+### 3. Model Call
+
+Only a message whose blocks all verified is sent to Claude. The system prompt
+tells Claude to treat guard-banded content as data and never as
+instructions. No verification tool is offered to the model, so its output
+cannot influence whether content is trusted.
 
 ### 4. Safe Processing
 
-Only after successful verification does Claude process the content as legitimate data.
+Claude only ever sees content that already passed verification, and still treats it as data rather than instructions.
 
 ## Security Properties
 

@@ -1,10 +1,14 @@
-# Replay-Protection Examples
+# Replay Protection
 
-Guard Bands prevents replay across different authenticated contexts. A payload wrapped for one tenant, request, user, or policy path fails verification when used under another context.
+The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.11.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
 
-Replay within the exact same context is an application policy decision. For production systems, pair Guard Bands with a nonce ledger, expiration window, or both.
+- [Core replay-protection examples](https://github.com/Cryptix-Security/guard-bands/blob/v0.11.0/docs/REPLAY_PROTECTION.md): context-bound replay protection, the nonce ledger pattern, expiration buckets, and tool-path binding.
 
-The POC includes optional replay protection:
+This page covers only how the reference API configures replay protection.
+
+## Reference stack configuration
+
+Replay protection is off by default. Enable the in-memory ledger for local evaluation and tests:
 
 ```bash
 REPLAY_PROTECTION_ENABLED=true
@@ -12,7 +16,7 @@ REPLAY_LEDGER_BACKEND=memory
 REPLAY_WINDOW_SECONDS=900
 ```
 
-`memory` is useful for local evaluation and tests. `sqlite` persists consumed nonces across restarts for a single-node pilot:
+Use `sqlite` to persist consumed nonces across restarts for a single-node pilot:
 
 ```bash
 REPLAY_PROTECTION_ENABLED=true
@@ -21,98 +25,6 @@ REPLAY_LEDGER_PATH=data/replay-ledger.sqlite3
 REPLAY_WINDOW_SECONDS=900
 ```
 
-Production deployments with multiple workers or replicas should use a shared datastore with atomic inserts or uniqueness constraints. The included SQLite backend is durable, but it is not a substitute for a shared Redis/Postgres ledger across multiple API replicas.
+`app/replay.py` builds the matching core ledger (`NonceReplayLedger` or `SQLiteReplayLedger`) at startup and applies it in `/verify`.
 
-## Context-Bound Replay Protection
-
-Wrap with a narrow context:
-
-```json
-{
-  "request_id": "req-001",
-  "tenant_id": "tenant-a",
-  "user": "alice",
-  "policy_path": "support.summarize"
-}
-```
-
-Verification fails if an attacker reuses the payload under:
-
-```json
-{
-  "request_id": "req-001",
-  "tenant_id": "tenant-b",
-  "user": "alice",
-  "policy_path": "support.summarize"
-}
-```
-
-or:
-
-```json
-{
-  "request_id": "req-001",
-  "tenant_id": "tenant-a",
-  "user": "alice",
-  "policy_path": "support.issue_refund"
-}
-```
-
-## Nonce Ledger Pattern
-
-For single-use payloads, store verified nonces and reject reuse:
-
-```python
-result = crypto.extract_and_verify(wrapped, context)
-if not result["valid"]:
-    deny(result["error"])
-
-nonce_key = (context["tenant_id"], result["key_id"], result["nonce"])
-if nonce_ledger.exists(nonce_key):
-    deny("replayed nonce")
-
-nonce_ledger.insert(nonce_key, ttl_seconds=900)
-allow(result["content"])
-```
-
-Use an atomic insert or uniqueness constraint so two concurrent requests cannot both consume the same nonce.
-
-## Expiration-Bucket Pattern
-
-For workflows that tolerate short reuse, include a bounded time bucket in context:
-
-```json
-{
-  "request_id": "req-001",
-  "tenant_id": "tenant-a",
-  "user": "alice",
-  "policy_path": "support.summarize",
-  "expires_at": "2026-06-14T22:00:00Z"
-}
-```
-
-Verification should check both the MAC and the expiration timestamp. The timestamp must be part of the signed context so attackers cannot extend the lifetime.
-
-## Tool-Path Binding
-
-Bind wrapped content to the narrowest tool or policy path that may consume it:
-
-```json
-{
-  "request_id": "req-001",
-  "tenant_id": "tenant-a",
-  "user": "alice",
-  "policy_path": "crm.read_only_summary"
-}
-```
-
-The same payload should not verify for:
-
-```json
-{
-  "request_id": "req-001",
-  "tenant_id": "tenant-a",
-  "user": "alice",
-  "policy_path": "crm.update_customer_record"
-}
-```
+Production deployments with multiple workers or replicas should use a shared datastore with atomic inserts or uniqueness constraints. The SQLite backend is durable, but it is not a substitute for a shared Redis or Postgres ledger across multiple API replicas. This stack does not ship one yet.
