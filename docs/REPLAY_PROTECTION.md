@@ -1,8 +1,8 @@
 # Replay Protection
 
-The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.10.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
+The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.11.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
 
-- [Core replay-protection examples](https://github.com/Cryptix-Security/guard-bands/blob/v0.10.0/docs/REPLAY_PROTECTION.md): context-bound replay protection, the nonce ledger pattern, expiration buckets, and tool-path binding.
+- [Core replay-protection examples](https://github.com/Cryptix-Security/guard-bands/blob/v0.11.0/docs/REPLAY_PROTECTION.md): context-bound replay protection, the nonce ledger pattern, expiration buckets, and tool-path binding.
 
 This page covers only how the reference API configures replay protection.
 

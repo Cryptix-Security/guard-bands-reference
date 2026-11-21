@@ -1,9 +1,9 @@
 # Architecture and Threat Model
 
-The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.10.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
+The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.11.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
 
-- [Core architecture and threat model](https://github.com/Cryptix-Security/guard-bands/blob/v0.10.0/docs/ARCHITECTURE.md): trust boundaries, signing and verification flow, marker format, FastAPI middleware, MCP integration, threats addressed, and what is out of scope.
-- [Core research document](https://github.com/Cryptix-Security/guard-bands/blob/v0.10.0/docs/RESEARCH.md): design rationale, security claims, and assumptions.
+- [Core architecture and threat model](https://github.com/Cryptix-Security/guard-bands/blob/v0.11.0/docs/ARCHITECTURE.md): trust boundaries, signing and verification flow, marker format, FastAPI middleware, MCP integration, threats addressed, and what is out of scope.
+- [Core research document](https://github.com/Cryptix-Security/guard-bands/blob/v0.11.0/docs/RESEARCH.md): design rationale, security claims, and assumptions.
 
 ## What this repository adds
 

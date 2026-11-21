@@ -1,8 +1,8 @@
 # Key Management
 
-The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.10.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
+The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.11.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
 
-- [Core key management expectations](https://github.com/Cryptix-Security/guard-bands/blob/v0.10.0/docs/KEY_MANAGEMENT.md): what the library expects from applications, production expectations, rotation grace windows, and the `KeyResolver` boundary.
+- [Core key management expectations](https://github.com/Cryptix-Security/guard-bands/blob/v0.11.0/docs/KEY_MANAGEMENT.md): what the library expects from applications, production expectations, rotation grace windows, and the `KeyResolver` boundary.
 
 This page covers only how the reference stack loads and rotates keys.
 

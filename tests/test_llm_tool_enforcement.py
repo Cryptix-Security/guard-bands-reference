@@ -171,7 +171,7 @@ def test_chat_rejects_incomplete_guard_band_markers_before_model_call():
     service = make_service([text_response("Malformed marker ignored.")])
 
     result = asyncio.run(
-        service.chat("Summarize: ⟪INERT:START:v:1:r:abc:iat:1:exp:2⟫ missing end", {})
+        service.chat("Summarize: ⟪INERT:START:v:2:r:abc:iat:1:exp:2⟫ missing end", {})
     )
 
     assert result["success"] is False

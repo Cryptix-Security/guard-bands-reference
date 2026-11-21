@@ -256,7 +256,7 @@ curl -X POST "http://localhost:8000/wrap" \
 **Response:**
 ```json
 {
-  "wrapped_content": "⟪INERT:START:v:1:r:nonce:iat:issued:exp:expiry⟫\nUser document content here\n⟪INERT:END:mac:signature:kid:key001:iss:issuer⟫",
+  "wrapped_content": "⟪INERT:START:v:2:r:nonce:iat:issued:exp:expiry⟫\nUser document content here\n⟪INERT:END:mac:signature:kid:key001:iss:issuer⟫",
   "nonce": "abc123...",
   "content_hash": "xyz789..."
 }
@@ -270,7 +270,7 @@ Verify cryptographic signatures:
 curl -X POST "http://localhost:8000/verify" \
   -H "Content-Type: application/json" \
   -d '{
-    "wrapped_content": "⟪INERT:START:v:1:...⟫content⟪INERT:END:...⟫",
+    "wrapped_content": "⟪INERT:START:v:2:...⟫content⟪INERT:END:...⟫",
     "context": {"request_id": "req-001", "user": "alice"}
   }'
 ```
@@ -282,7 +282,7 @@ curl -X POST "http://localhost:8000/verify" \
   "content": "User document content here",
   "nonce": "abc123...",
   "key_id": "key001",
-  "version": "1"
+  "version": "2"
 }
 ```
 
@@ -294,7 +294,7 @@ Send queries to Claude with guard band awareness:
 curl -X POST "http://localhost:8000/chat" \
   -H "Content-Type: application/json" \
   -d '{
-    "message": "Analyze this document: ⟪INERT:START:v:1:...⟫content⟪INERT:END:...⟫",
+    "message": "Analyze this document: ⟪INERT:START:v:2:...⟫content⟪INERT:END:...⟫",
     "context": {"request_id": "req-001", "user": "alice"}
   }'
 ```

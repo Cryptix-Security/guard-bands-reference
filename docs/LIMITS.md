@@ -1,8 +1,8 @@
 # Limits and Benchmarks
 
-The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.10.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
+The Guard Bands mechanism is documented in the core library repository. This repository pins core `v0.11.0` (see `pyproject.toml`), so the links below point at the core docs for that tag. Update them when the pin moves.
 
-- [Core limits](https://github.com/Cryptix-Security/guard-bands/blob/v0.10.0/docs/LIMITS.md): protocol version, MAC, nonce and key id rules, replay ledgers, MCP payload size, and parser behavior.
+- [Core limits](https://github.com/Cryptix-Security/guard-bands/blob/v0.11.0/docs/LIMITS.md): protocol version, MAC, nonce and key id rules, replay ledgers, MCP payload size, and parser behavior.
 
 This page covers only the limits and benchmarks specific to the reference stack.
 
