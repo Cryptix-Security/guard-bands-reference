@@ -48,13 +48,16 @@ def main() -> None:
     )
 
     print_step("1. Ingest a malicious document through the data plane (port 8001)")
-    ingest = data.post("/ingest", json={
-        "content": malicious_document,
-        "source": "email://inbound",
-        "request_id": "req-001",
-        "tenant_id": "tenant-a",
-        "user": "alice",
-    })
+    ingest = data.post(
+        "/ingest",
+        json={
+            "content": malicious_document,
+            "source": "email://inbound",
+            "request_id": "req-001",
+            "tenant_id": "tenant-a",
+            "user": "alice",
+        },
+    )
     wrapped = ingest.json()
     print(wrapped["wrapped_content"].splitlines()[0])
     print("...")
@@ -65,24 +68,30 @@ def main() -> None:
     print(f"POST /execute on data plane -> {response.status_code} (no such endpoint)")
 
     print_step("3. Trusted instruction on the control plane (port 8002): summarize")
-    response = control.post("/execute", json={
-        "action": "summarize_document",
-        "principal_user": "alice",
-        "principal_role": "viewer",
-        "tenant_id": "tenant-a",
-        "documents": [wrapped],
-    })
+    response = control.post(
+        "/execute",
+        json={
+            "action": "summarize_document",
+            "principal_user": "alice",
+            "principal_role": "viewer",
+            "tenant_id": "tenant-a",
+            "documents": [wrapped],
+        },
+    )
     print(response.status_code, response.json())
     print("(the injected 'issue_refund' text was inert data — it selected nothing)")
 
     print_step("4. The injected escalation still fails through the real channel")
-    response = control.post("/execute", json={
-        "action": "issue_refund",
-        "principal_user": "alice",
-        "principal_role": "viewer",
-        "tenant_id": "tenant-a",
-        "documents": [wrapped],
-    })
+    response = control.post(
+        "/execute",
+        json={
+            "action": "issue_refund",
+            "principal_user": "alice",
+            "principal_role": "viewer",
+            "tenant_id": "tenant-a",
+            "documents": [wrapped],
+        },
+    )
     print(response.status_code, response.json())
 
     print_step("5. Tampered document is rejected fail-closed")
@@ -90,23 +99,29 @@ def main() -> None:
     tampered["wrapped_content"] = tampered["wrapped_content"].replace(
         "account 4471", "account 9999"
     )
-    response = control.post("/execute", json={
-        "action": "summarize_document",
-        "principal_user": "alice",
-        "principal_role": "viewer",
-        "tenant_id": "tenant-a",
-        "documents": [tampered],
-    })
+    response = control.post(
+        "/execute",
+        json={
+            "action": "summarize_document",
+            "principal_user": "alice",
+            "principal_role": "viewer",
+            "tenant_id": "tenant-a",
+            "documents": [tampered],
+        },
+    )
     print(response.status_code, response.json())
 
     print_step("6. Raw unwrapped text is rejected — data must carry the data-plane signature")
-    response = control.post("/execute", json={
-        "action": "summarize_document",
-        "principal_user": "alice",
-        "principal_role": "viewer",
-        "tenant_id": "tenant-a",
-        "documents": [{"wrapped_content": malicious_document, "context": wrapped["context"]}],
-    })
+    response = control.post(
+        "/execute",
+        json={
+            "action": "summarize_document",
+            "principal_user": "alice",
+            "principal_role": "viewer",
+            "tenant_id": "tenant-a",
+            "documents": [{"wrapped_content": malicious_document, "context": wrapped["context"]}],
+        },
+    )
     print(response.status_code, response.json())
 
     print_step("7. The control plane cannot forge data-plane provenance")

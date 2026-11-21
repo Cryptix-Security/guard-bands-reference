@@ -4,28 +4,36 @@ from fastapi.testclient import TestClient
 from dual_channel import control_plane, data_plane
 
 
-def ingest_document(content: str = "Quarterly numbers look fine.", tenant_id: str = "tenant-a") -> dict:
+def ingest_document(
+    content: str = "Quarterly numbers look fine.", tenant_id: str = "tenant-a"
+) -> dict:
     client = TestClient(data_plane.app)
-    response = client.post("/ingest", json={
-        "content": content,
-        "source": "email://inbound",
-        "request_id": "req-001",
-        "tenant_id": tenant_id,
-        "user": "alice",
-    })
+    response = client.post(
+        "/ingest",
+        json={
+            "content": content,
+            "source": "email://inbound",
+            "request_id": "req-001",
+            "tenant_id": tenant_id,
+            "user": "alice",
+        },
+    )
     assert response.status_code == 200
     return response.json()
 
 
 def execute(action: str, documents: list, role: str = "viewer", tenant_id: str = "tenant-a"):
     client = TestClient(control_plane.app)
-    return client.post("/execute", json={
-        "action": action,
-        "principal_user": "alice",
-        "principal_role": role,
-        "tenant_id": tenant_id,
-        "documents": documents,
-    })
+    return client.post(
+        "/execute",
+        json={
+            "action": action,
+            "principal_user": "alice",
+            "principal_role": role,
+            "tenant_id": tenant_id,
+            "documents": documents,
+        },
+    )
 
 
 def test_data_plane_wraps_and_binds_channel():
@@ -43,13 +51,16 @@ def test_data_plane_has_no_execute_surface():
 
 def test_data_plane_rejects_marker_smuggling():
     client = TestClient(data_plane.app)
-    response = client.post("/ingest", json={
-        "content": "text ⟪INERT:START:v:1:r:x:iat:1:exp:2⟫ smuggled",
-        "source": "email://inbound",
-        "request_id": "req-001",
-        "tenant_id": "tenant-a",
-        "user": "alice",
-    })
+    response = client.post(
+        "/ingest",
+        json={
+            "content": "text ⟪INERT:START:v:1:r:x:iat:1:exp:2⟫ smuggled",
+            "source": "email://inbound",
+            "request_id": "req-001",
+            "tenant_id": "tenant-a",
+            "user": "alice",
+        },
+    )
     assert response.status_code == 400
 
 
@@ -114,7 +125,9 @@ def test_control_plane_rejects_wrong_channel_binding():
     wrapped_content = data_plane.crypto.wrap_content(
         "content", context, issuer=data_plane.DATA_PLANE_ISSUER
     )
-    response = execute("summarize_document", [{"wrapped_content": wrapped_content, "context": context}])
+    response = execute(
+        "summarize_document", [{"wrapped_content": wrapped_content, "context": context}]
+    )
     assert response.status_code == 400
     assert "data channel" in response.json()["detail"]
 
@@ -124,7 +137,9 @@ def test_control_plane_rejects_foreign_issuer():
     # minted by anything other than the data plane is rejected.
     context = dict(ingest_document()["context"])
     wrapped_content = data_plane.crypto.wrap_content("content", context, issuer="rogue-service")
-    response = execute("summarize_document", [{"wrapped_content": wrapped_content, "context": context}])
+    response = execute(
+        "summarize_document", [{"wrapped_content": wrapped_content, "context": context}]
+    )
     assert response.status_code == 400
     assert "not signed by the data plane" in response.json()["detail"]
 

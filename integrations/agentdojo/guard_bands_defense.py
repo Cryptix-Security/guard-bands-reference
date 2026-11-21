@@ -41,7 +41,6 @@ from agentdojo.types import (
     get_text_content_as_str,
     text_content_block_from_string,
 )
-
 from guardbands import GuardBandCrypto
 
 GUARD_BAND_SYSTEM_SUFFIX = (

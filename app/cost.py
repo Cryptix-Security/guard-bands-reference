@@ -1,7 +1,7 @@
 import json
 import math
+from collections.abc import Mapping, Sequence
 from typing import Any
-
 
 ESTIMATION_METHOD = "approx_chars_per_token"
 APPROX_CHARS_PER_TOKEN = 4
@@ -39,19 +39,21 @@ def estimate_chat_request_cost(
     *,
     model: str,
     system: str,
-    messages: list[dict[str, Any]],
-    tools: list[dict[str, Any]],
+    messages: Sequence[Mapping[str, Any]],
+    tools: Sequence[Mapping[str, Any]],
     output_token_budget: int,
     input_usd_per_mtok: float,
     output_usd_per_mtok: float,
     threshold_usd: float,
     guard_enabled: bool,
 ) -> dict[str, Any]:
-    input_tokens = estimate_tokens_for_value({
-        "system": system,
-        "messages": messages,
-        "tools": tools,
-    })
+    input_tokens = estimate_tokens_for_value(
+        {
+            "system": system,
+            "messages": messages,
+            "tools": tools,
+        }
+    )
     costs = calculate_cost_usd(
         input_tokens=input_tokens,
         output_tokens=output_token_budget,

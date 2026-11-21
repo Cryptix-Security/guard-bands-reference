@@ -1,5 +1,5 @@
-import sys
 import statistics
+import sys
 import time
 from pathlib import Path
 
@@ -35,7 +35,10 @@ def main() -> None:
     bench("wrap 2.8 KB content", time_call(lambda: crypto.wrap_content("x" * 2800, context)))
     bench("verify 2.8 KB content", time_call(lambda: crypto.extract_and_verify(block, context)))
     bench("extract 10 blocks", time_call(lambda: extract_guard_band_blocks(prompt)))
-    bench("extract after malformed markers", time_call(lambda: extract_guard_band_blocks(malformed_prompt)))
+    bench(
+        "extract after malformed markers",
+        time_call(lambda: extract_guard_band_blocks(malformed_prompt)),
+    )
 
 
 if __name__ == "__main__":

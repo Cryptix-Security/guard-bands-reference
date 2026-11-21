@@ -1,11 +1,10 @@
 import os
 
 from fastapi import FastAPI, HTTPException
+from guardbands import GuardBandCrypto
 from pydantic import BaseModel, Field
 
 from app.authorization import Principal, authorize_action
-from guardbands import GuardBandCrypto
-
 
 crypto = GuardBandCrypto(
     os.getenv("REFERENCE_APP_SECRET_KEY", "reference-app-dev-secret").encode("utf-8")

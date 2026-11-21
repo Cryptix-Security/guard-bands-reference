@@ -21,8 +21,9 @@ class _CapturingSink:
 
 
 def test_chat_audit_event_records_actual_cost(monkeypatch):
-    async def fake_chat(user_message, context=None, max_output_tokens=None,
-                        approve_estimated_cost=False):
+    async def fake_chat(
+        user_message, context=None, max_output_tokens=None, approve_estimated_cost=False
+    ):
         return {
             "success": True,
             "response": "ok",
