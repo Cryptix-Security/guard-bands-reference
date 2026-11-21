@@ -5,6 +5,11 @@
 - Updated the versioned core dependency to `guard-bands` v0.10.0 for
   reserved-marker rejection, hardened embedded-block extraction, and typed
   package metadata.
+- Updated the core dependency to `guard-bands` v0.11.0. New bands use
+  protocol v2 (`v:2` markers, RFC 8785 canonical JSON, `GBv2-*` algorithm
+  tags); legacy v1 bands still verify during migration.
+- Updated marker examples in the docs, the LLM system prompt, tests, and
+  red-team/benchmark scripts to the v2 wire format.
 
 ## v0.2.0 - 2026-08-15
 

@@ -7,9 +7,9 @@ This POC intentionally keeps limits conservative. They are designed to make the 
 | Area | Current behavior |
 |---|---|
 | Content size | API request models and FastAPI integration middleware default to 50 KB |
-| Protocol version | only Guard Band marker version `v:1` is accepted |
+| Protocol version | new bands are signed as marker version `v:2`; verification accepts `v:2` and legacy `v:1` |
 | Hash | SHA-256 over UTF-8 content, returned from `/wrap` for audit logging only — not part of verification |
-| MAC | HMAC-SHA256 over canonical JSON payload; the sole integrity guarantee checked during verification |
+| MAC | HMAC-SHA256 (or Ed25519) over the RFC 8785 canonical JSON payload; the sole integrity guarantee checked during verification |
 | Nonce | random URL-safe nonce, validated as 16-128 URL-safe characters |
 | Key id | 1-64 characters, limited to letters, numbers, `_`, `.`, and `-` |
 | Replay ledger | optional in-memory ledger or SQLite-backed persistent ledger |

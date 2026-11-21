@@ -23,7 +23,7 @@ The model is not the root of trust. It can request verification, but the applica
 The marker format is versioned, and every field is authenticated by the MAC:
 
 ```text
-⟪INERT:START:v:1:r:b64url(nonce):iat:issued_at:exp:expires_at⟫
+⟪INERT:START:v:2:r:b64url(nonce):iat:issued_at:exp:expires_at⟫
 [untrusted content]
 ⟪INERT:END:mac:b64(mac):kid:keyid:iss:b64url(issuer)⟫
 ```

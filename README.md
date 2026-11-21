@@ -83,7 +83,7 @@ Prompt wording alone is not a security boundary.
 Guard Bands wraps untrusted content with cryptographically signed markers:
 
 ```text
-⟪INERT:START:v:1:r:b64url(nonce):iat:issued_at:exp:expires_at⟫
+⟪INERT:START:v:2:r:b64url(nonce):iat:issued_at:exp:expires_at⟫
 [Untrusted user content goes here]
 ⟪INERT:END:mac:b64(mac):kid:keyid:iss:b64url(issuer)⟫
 ```
