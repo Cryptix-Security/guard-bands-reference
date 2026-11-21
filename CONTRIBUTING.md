@@ -10,8 +10,13 @@ Use Python 3.12 for local development. CI currently tests Python 3.11 and 3.12.
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-dev.txt
-python -m pytest
+make check   # ruff lint + format check, strict mypy baseline, pytest
 ```
+
+CI runs the same gates as the core `guard-bands` repo: Ruff lint, Ruff format
+check, strict mypy on the files listed under `[tool.mypy]` in `pyproject.toml`,
+and pytest on Python 3.11 and 3.12. `make format` applies Ruff fixes. When you
+fully type another module, add it to the mypy `files` list.
 
 ## Pull Requests
 

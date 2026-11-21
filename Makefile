@@ -1,4 +1,4 @@
-.PHONY: install-dev test demo reference-demo dual-channel-demo mcp-demo dual-channel-keys agentdojo-style-eval redteam-control-plane bench run
+.PHONY: install-dev test lint format typecheck check demo reference-demo dual-channel-demo mcp-demo dual-channel-keys agentdojo-style-eval redteam-control-plane bench run
 
 PYTHON ?= python3
 
@@ -7,6 +7,22 @@ install-dev:
 
 test:
 	$(PYTHON) -m pytest
+
+LINT_PATHS = app dual_channel guardbands_sdk integrations reference_app examples scripts tests demo_llm_attack.py
+
+lint:
+	$(PYTHON) -m ruff check $(LINT_PATHS)
+	$(PYTHON) -m ruff format --check $(LINT_PATHS)
+
+format:
+	$(PYTHON) -m ruff check --fix $(LINT_PATHS)
+	$(PYTHON) -m ruff format $(LINT_PATHS)
+
+typecheck:
+	$(PYTHON) -m mypy
+
+# Everything CI runs.
+check: lint typecheck test
 
 demo:
 	$(PYTHON) scripts/fastapi_demo.py
