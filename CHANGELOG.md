@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- `/chat` now verifies every guard band block on the server before the first
+  model call. A forged, tampered, wrong-context, expired, replayed, or
+  malformed block rejects the request and the model never reads it. The
+  model is no longer offered a `verify_guard_bands` tool, and any tool call
+  it returns is rejected.
 - Updated the versioned core dependency to `guard-bands` v0.10.0 for
   reserved-marker rejection, hardened embedded-block extraction, and typed
   package metadata.
