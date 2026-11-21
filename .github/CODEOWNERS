@@ -1,11 +1,43 @@
-# Create a GitHub team with write access, then uncomment and replace
-# @Cryptix-Security/owners with the actual maintainer team slug.
+# Code owners for guard-bands-reference.
 #
-# * @Cryptix-Security/owners
-# /.github/ @Cryptix-Security/owners
-# /app/llm.py @Cryptix-Security/owners
-# /app/replay.py @Cryptix-Security/owners
-# /app/middleware/ @Cryptix-Security/owners
-# /requirements*.txt @Cryptix-Security/owners
-# /pyproject.toml @Cryptix-Security/owners
-# /docker-compose.yml @Cryptix-Security/owners
+# These entries only block merges once branch protection on `main` has
+# "Require review from Code Owners" turned on. GitHub ignores owners who lack
+# write access to the repository, and a PR author's own approval never counts,
+# so a single-person owner list cannot approve that person's own PRs.
+#
+# TODO(owners): @mtoren1 is a placeholder until a maintainer team exists.
+# Replace it with the team slug (for example @Cryptix-Security/guard-bands-maintainers)
+# and add a second reviewer for the security paths below.
+
+# Default owner for anything not matched below.
+*                               @mtoren1
+
+# CI, dependency automation and this file.
+/.github/                       @mtoren1
+
+# LLM tool-enforcement loop and system prompt.
+/app/llm.py                     @mtoren1
+
+# Replay protection, authn/z, secrets and key loading.
+/app/replay.py                  @mtoren1
+/app/middleware/                @mtoren1
+/app/authorization.py           @mtoren1
+/app/config.py                  @mtoren1
+/app/secrets_provider.py        @mtoren1
+
+# Audit logging and sinks.
+/app/audit.py                   @mtoren1
+/app/sinks/                     @mtoren1
+
+# Ed25519 dual-channel data and control planes.
+/dual_channel/                  @mtoren1
+
+# Deployment, identity provider and container config.
+/deploy/                        @mtoren1
+/keycloak/                      @mtoren1
+/Dockerfile                     @mtoren1
+/docker-compose.yml             @mtoren1
+
+# Dependency pins, including the core library tag.
+/requirements*.txt              @mtoren1
+/pyproject.toml                 @mtoren1
