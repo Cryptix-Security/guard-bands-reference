@@ -1,5 +1,3 @@
-import json
-
 import requests
 
 BASE_URL = "http://localhost:8000"
@@ -41,11 +39,10 @@ def demo_with_guard_bands_and_verification():
 
 {wrapped_doc}
 
-Please verify the guard bands using context: {json.dumps(context)}
-Then summarize the key financial information from this document."""
+Summarize the key financial information from this document."""
 
-    print("Step 2: Sending to Claude with verification tool...")
-    print("(Claude will call the verification endpoint automatically)\n")
+    print("Step 2: Sending to /chat...")
+    print("(The server verifies the guard bands before Claude sees them)\n")
 
     response = requests.post(
         f"{BASE_URL}/chat",
@@ -130,7 +127,7 @@ def main():
     print()
     print("  With Guard Bands:")
     print("  1. ✓ Content is cryptographically wrapped")
-    print("  2. ✓ Claude detects and verifies guard bands")
+    print("  2. ✓ The server verifies guard bands before the model call")
     print("  3. ✓ Only verified content is processed")
     print("  4. ✓ Injection instructions are identified and ignored")
     print("  5. ✓ Legitimate data is safely extracted")

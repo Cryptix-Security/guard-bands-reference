@@ -78,9 +78,8 @@ extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Header", 
 [tool.ruff.lint.per-file-ignores]
 # Demo scripts put the repo root on sys.path before importing app code.
 "scripts/*" = ["E402"]
-# Long lines here are LLM prompt text and attack fixtures; wrapping them would
-# change the strings the model or parser sees.
-"app/llm.py" = ["E501"]
+# Long lines here are attack fixtures; wrapping them would change the strings
+# the model or parser sees.
 "demo_llm_attack.py" = ["E501"]
 "scripts/redteam_control_plane.py" = ["E402", "E501"]
 # Public SDK exception names; renaming them would break callers.
